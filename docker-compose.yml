@@ -1,0 +1,53 @@
+version: '3.7'
+
+volumes:
+  postgres_data:
+  elasticsearch_data:
+  cache_data:
+
+
+networks:
+  api_network:
+
+
+services:
+  postgresql:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:14-alpine
+    restart: unless-stopped
+    networks:
+      - api_network
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: random_password
+      POSTGRES_DB: sabina-rental-payments
+      POSTGRES_PORT: 5432
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.17.7
+    restart: unless-stopped
+    networks:
+      - api_network
+    ports:
+      - '9200:9200'
+    volumes:
+      - elasticsearch_data:/bitnami/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+
+  redis:
+    container_name: redis
+    image: redis:6.2-bullseye
+    restart: unless-stopped
+    networks:
+      - api_network
+    ports:
+      - '6380:6379'
+    volumes:
+      - cache_data:/data
