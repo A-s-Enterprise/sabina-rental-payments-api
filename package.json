@@ -23,6 +23,7 @@
     "compose:up": "docker-compose up --wait --quiet-pull",
     "compose:down": "docker-compose down",
     "docker:volume-clear": "docker volume prune --force",
+    "git:dev-squash": "git checkout main; git merge development --squash",
     "db:migrate": "npx prisma migrate dev"
   },
   "dependencies": {
