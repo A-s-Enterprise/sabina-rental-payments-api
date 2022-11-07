@@ -1,0 +1,166 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [uuidOssp(map: "uuid-ossp")]
+}
+
+model User {
+  id          String   @id @default(uuid())
+  firstName   String   @map("first_name") @db.VarChar(30)
+  middleName  String?  @map("middle_name")
+  lastName    String   @map("last_name") @db.VarChar(30)
+  email       String   @unique @db.VarChar(50)
+  userName    String   @unique @map("user_name") @db.VarChar(50)
+  password    String
+  avatarUrl   String?  @map("avatar_url")
+  roomId      String   @map("room_id")
+  dateOfBirth DateTime @map("date_of_birth")
+  status      Status   @default(INACTIVE)
+  type        UserType @default(TENANT)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+
+  room                 Room                @relation(fields: [roomId], references: [id])
+  messages             Message[]
+  payments             Payment[]
+  conversations        User_Conversation[]
+  createdConversations Conversation[]
+  additionalFees       AdditionalFee[]
+
+  @@index([createdAt(sort: Desc)])
+  @@map("users")
+}
+
+model Floor {
+  id        String   @id @default(uuid())
+  name      String
+  status    Status   @default(INACTIVE)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  rooms Room[]
+
+  @@map("floors")
+}
+
+model Room {
+  id                   String @id @default(uuid())
+  name                 String @unique @db.VarChar(30)
+  floorId              String @map("floor_id")
+  roomTypeId           String @map("room_type_id")
+  tenantOccupancyLimit Int    @map("tenant_occupancy_limit")
+  status               Status @default(ACTIVE)
+
+  floor    Floor    @relation(fields: [floorId], references: [id])
+  roomType RoomType @relation(fields: [roomTypeId], references: [id])
+  users    User[]
+
+  @@map("rooms")
+}
+
+model RoomType {
+  id        String   @id @default(uuid())
+  name      String
+  amount    Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  Room Room[]
+
+  @@map("room_types")
+}
+
+model Conversation {
+  id          String   @id @default(uuid())
+  name        String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+  createdById String   @map("created_by_id")
+
+  createdBy User                @relation(fields: [createdById], references: [id])
+  users     User_Conversation[]
+  Message   Message[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String        @id @default(uuid())
+  message        String
+  senderId       String        @map("user_id")
+  conversationId String        @map("conversation_id")
+  status         MessageStatus @default(SENT)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @default(now()) @map("updated_at")
+  deletedAt      DateTime?     @map("deleted_at")
+
+  sender      User         @relation(fields: [senderId], references: [id])
+  converation Conversation @relation(fields: [conversationId], references: [id])
+
+  @@map("messages")
+}
+
+model User_Conversation {
+  userId         String @map("user_id")
+  conversationId String @map("conversation_id")
+
+  user         User         @relation(fields: [userId], references: [id])
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+
+  @@id([userId, conversationId])
+  @@map("user_conversations")
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  userId    String?
+  amount    Int
+  dueDate   DateTime @map("due_date")
+  isPaid    Boolean  @default(false) @map("is_paid")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  User User? @relation(fields: [userId], references: [id])
+
+  @@index([createdAt(sort: Desc)])
+  @@index([updatedAt(sort: Desc)])
+  @@map("payments")
+}
+
+// Monthly Additional Fee
+model AdditionalFee {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(50)
+  amount    Int
+  userId    String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("additional_fees")
+}
+
+enum UserType {
+  ADMIN
+  TENANT
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  SEEN
+}
