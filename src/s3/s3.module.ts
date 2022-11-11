@@ -9,7 +9,7 @@ import { S3Service } from './s3.service';
   providers: [
     {
       provide: S3_CLIENT,
-      useFactory: (configService: ConfigService) => {
+      useFactory: (configService: ConfigService): S3Client => {
         return new S3Client({
           region: configService.get('AWS_REGION'),
           maxAttempts: 3,
