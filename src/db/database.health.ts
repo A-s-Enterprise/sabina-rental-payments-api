@@ -14,7 +14,7 @@ export class DBHealthIndicator extends HealthIndicator {
     super();
   }
 
-  async isDBHealthy(): Promise<HealthIndicatorResult> {
+  async isHealthy(): Promise<HealthIndicatorResult> {
     try {
       const [{ date = null }] = await this.prisma.$queryRaw<
         { [key: string]: string }[]
