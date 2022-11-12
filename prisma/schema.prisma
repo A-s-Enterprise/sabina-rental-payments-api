@@ -21,14 +21,14 @@ model User {
   userName    String   @unique @map("user_name") @db.VarChar(50)
   password    String
   avatarUrl   String?  @map("avatar_url")
-  roomId      String   @map("room_id")
+  roomId      String?  @map("room_id")
   dateOfBirth DateTime @map("date_of_birth")
   status      Status   @default(INACTIVE)
   type        UserType @default(TENANT)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @map("updated_at")
 
-  room                 Room                @relation(fields: [roomId], references: [id])
+  room                 Room?               @relation(fields: [roomId], references: [id])
   messages             Message[]
   payments             Payment[]
   conversations        User_Conversation[]
