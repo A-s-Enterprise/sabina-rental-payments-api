@@ -73,7 +73,7 @@ model RoomType {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
-  Room Room[]
+  rooms Room[]
 
   @@map("room_types")
 }
@@ -87,7 +87,7 @@ model Conversation {
 
   createdBy User                @relation(fields: [createdById], references: [id])
   users     User_Conversation[]
-  Message   Message[]
+  messages  Message[]
 
   @@map("conversations")
 }
@@ -128,7 +128,7 @@ model Payment {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
-  User User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id])
 
   @@index([createdAt(sort: Desc)])
   @@index([updatedAt(sort: Desc)])
