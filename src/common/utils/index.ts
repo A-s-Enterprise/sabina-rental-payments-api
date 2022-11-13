@@ -4,7 +4,7 @@ const hashPassword = async (password: string) => {
   return bcrypt.hash(password, await bcrypt.genSalt(10));
 };
 
-const comparePasswordAndHash = (password: string, hash: string) => {
+const comparePassword = (password: string, hash: string) => {
   return bcrypt.compare(password, hash);
 };
 
@@ -19,4 +19,4 @@ const omit = <T extends object, K extends keyof T>(
   return o as Omit<T, K>;
 };
 
-export { hashPassword, comparePasswordAndHash, omit };
+export { hashPassword, comparePassword, omit };
