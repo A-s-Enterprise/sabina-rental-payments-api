@@ -14,10 +14,10 @@ const AppPrismaMiddleware: Prisma.Middleware = async (params, next) => {
 
   const result = await next(params);
 
-  if (isUserModel) {
+  if (isUserModel && result) {
     return Array.isArray(result)
       ? result.map((val) => omit(val, 'password'))
-      : omit(result, 'password');
+      : result;
   }
 
   return result;
