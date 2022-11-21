@@ -120,13 +120,14 @@ model User_Conversation {
 }
 
 model Payment {
-  id        String   @id @default(uuid())
-  userId    String?
-  amount    Int
-  dueDate   DateTime @map("due_date")
-  isPaid    Boolean  @default(false) @map("is_paid")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
+  id         String   @id @default(uuid())
+  userId     String?
+  amount     Int
+  dueDate    DateTime @map("due_date")
+  receiptUrl String?  @map("receipt_url")
+  isPaid     Boolean  @default(false) @map("is_paid")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
 
   user User? @relation(fields: [userId], references: [id])
 
