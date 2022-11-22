@@ -3,7 +3,11 @@ name: Test
 on:
   push:
     branches:
+<<<<<<< HEAD
       - master
+=======
+      - main
+>>>>>>> development
     paths-ignore:
       - '*.md'
       - 'tsconfig*.json'
