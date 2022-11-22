@@ -13,6 +13,9 @@ import { SearchModule } from './search/search.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { CacheModule } from './cache/cache.module';
+import { FloorModule } from './floor/floor.module';
+import { RoomModule } from './room/room.module';
+import { RoomTypeModule } from './room-type/room-type.module';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { CacheModule } from './cache/cache.module';
     SearchModule,
     AuthModule,
     UserModule,
+    FloorModule,
+    RoomModule,
+    RoomTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService, RateLimiterGuard],

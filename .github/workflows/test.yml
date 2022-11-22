@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '*.md'
+      - 'tsconfig*.json'
+      - .gitignore
+      - Dockerfile
+      - .dockerignore
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Get Source Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/node@v3
+        with:
+          node-version: 18.12.0
+          cache: yarn
+      
+      - name: Cache Node Modules
+        id: cache-dependencies
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-cache-${{ hashFiles('**/yarn.lock') }}
+          path: node_modules
+          restore-keys: |
+            ${{ runner.os }}-cache-${{ hashFiles('**/yarn.lock') }}
+
+      - if: ${{ steps.cache-dependencies.outputs.cache-hit == false }}
+        name: Install dependencies
+        run: yarn
+
+      - name: Unit test
+        run: yarn test
