@@ -41,7 +41,7 @@ model User {
 
 model Floor {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @unique
   status    Status   @default(INACTIVE)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
@@ -68,7 +68,7 @@ model Room {
 
 model RoomType {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @unique
   amount    Int
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")

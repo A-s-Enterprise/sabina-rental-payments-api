@@ -25,6 +25,7 @@
     "docker:volume-clear": "docker volume prune --force",
     "git:dev-squash": "git checkout main && git merge --squash development",
     "db:migrate": "npx prisma migrate dev --name",
+    "db:ui": "npx prisma studio",
     "test:auth": "jest --verbose ./src/user --watch"
   },
   "dependencies": {
