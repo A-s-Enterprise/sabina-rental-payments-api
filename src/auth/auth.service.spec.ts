@@ -8,6 +8,7 @@ import {
   getRedisToken,
   DEFAULT_REDIS_NAMESPACE,
 } from '@liaoliaots/nestjs-redis';
+import { BadRequestException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -42,7 +43,12 @@ describe('AuthService', () => {
           provide: UserService,
           useValue: {
             findByUsername: jest.fn().mockImplementation(async (userName) => {
-              return users.find((user) => user.userName === userName);
+              const user = users.find((user) => user.userName === userName);
+
+              if (!user) {
+                throw new BadRequestException('user does not exist.');
+              }
+              return user;
             }),
           },
         },
@@ -91,7 +97,7 @@ describe('AuthService', () => {
         userName: 'test',
         password: 'aa',
       }),
-    ).rejects.toThrowError('user does not exists.');
+    ).rejects.toThrowError('user does not exist.');
   });
 
   it('should throw if the password provided is incorrect.', async () => {
