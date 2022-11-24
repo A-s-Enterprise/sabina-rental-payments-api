@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  previewFeatures = ["postgresqlExtensions", "filteredRelationCount"]
 }
 
 datasource db {
@@ -26,7 +26,7 @@ model User {
   status      Status   @default(INACTIVE)
   type        UserType @default(TENANT)
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @default(now()) @map("updated_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   room                 Room?               @relation(fields: [roomId], references: [id])
   messages             Message[]
@@ -44,7 +44,7 @@ model Floor {
   name      String   @unique
   status    Status   @default(INACTIVE)
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   rooms Room[]
 
@@ -52,12 +52,14 @@ model Floor {
 }
 
 model Room {
-  id                   String @id @default(uuid())
-  name                 String @unique @db.VarChar(30)
-  floorId              String @map("floor_id")
-  roomTypeId           String @map("room_type_id")
-  tenantOccupancyLimit Int    @map("tenant_occupancy_limit")
-  status               Status @default(ACTIVE)
+  id                   String   @id @default(uuid())
+  name                 String   @unique @db.VarChar(30)
+  floorId              String   @map("floor_id")
+  roomTypeId           String   @map("room_type_id")
+  tenantOccupancyLimit Int      @map("tenant_occupancy_limit")
+  status               Status   @default(ACTIVE)
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
 
   floor    Floor    @relation(fields: [floorId], references: [id])
   roomType RoomType @relation(fields: [roomTypeId], references: [id])
@@ -71,7 +73,7 @@ model RoomType {
   name      String   @unique
   amount    Int
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   rooms Room[]
 
@@ -82,7 +84,7 @@ model Conversation {
   id          String   @id @default(uuid())
   name        String
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @default(now()) @map("updated_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
   createdById String   @map("created_by_id")
 
   createdBy User                @relation(fields: [createdById], references: [id])
@@ -99,7 +101,7 @@ model Message {
   conversationId String        @map("conversation_id")
   status         MessageStatus @default(SENT)
   createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @default(now()) @map("updated_at")
+  updatedAt      DateTime      @default(now()) @updatedAt @map("updated_at")
   deletedAt      DateTime?     @map("deleted_at")
 
   sender      User         @relation(fields: [senderId], references: [id])
@@ -127,7 +129,7 @@ model Payment {
   receiptUrl String?  @map("receipt_url")
   isPaid     Boolean  @default(false) @map("is_paid")
   createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @default(now()) @map("updated_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
 
   user User? @relation(fields: [userId], references: [id])
 
@@ -143,7 +145,7 @@ model AdditionalFee {
   amount      Int
   userId      String   @map("user_id")
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @default(now()) @map("updated_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   user User? @relation(fields: [userId], references: [id])
 
