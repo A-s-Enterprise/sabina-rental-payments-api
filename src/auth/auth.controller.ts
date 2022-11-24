@@ -1,14 +1,7 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpCode,
-  UseGuards,
-  Req,
-} from '@nestjs/common';
-import { User as UserType } from '@prisma/client';
+import { Controller, Post, Body, HttpCode, UseGuards } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { RefreshTokenGuard } from '../common/guards/refresh-token.guard';
+import { UserTokenData } from '../common/utils';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 
@@ -25,7 +18,7 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(200)
   @UseGuards(RefreshTokenGuard)
-  refresh(@User() user: Pick<UserType, 'id' | 'userName'>) {
+  refresh(@User() user: UserTokenData) {
     return this.authService.refresh(user);
   }
 }

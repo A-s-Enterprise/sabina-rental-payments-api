@@ -1,13 +1,12 @@
+import Redis from 'ioredis';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
-import { comparePassword } from '../common/utils';
+import { AuthTokens, comparePassword, UserTokenData } from '../common/utils';
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
-import Redis from 'ioredis';
 import { REFRESH_TOKEN_EXPIRATION } from '../constant';
 import { ConfigService } from '@nestjs/config';
-import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -18,14 +17,10 @@ export class AuthService {
     @InjectRedis() private client: Redis,
   ) {}
 
-  async login({ userName, password }: LoginDto) {
+  async login({ userName, password }: LoginDto): Promise<AuthTokens> {
     const user = await this.userService.findByUsername(userName);
 
-    if (!user) {
-      throw new BadRequestException('user does not exists.');
-    }
-
-    const isPasswordTheSame = await comparePassword(password, user.password);
+    const isPasswordTheSame = await comparePassword(password, user?.password);
 
     if (!isPasswordTheSame) {
       throw new BadRequestException('password provided is incorrect.');
@@ -34,19 +29,23 @@ export class AuthService {
     return this.getAccessAndRefresh(user);
   }
 
-  refresh(user) {
+  refresh(user: UserTokenData): Promise<AuthTokens> {
     return this.getAccessAndRefresh(user);
   }
 
-  async getAccessAndRefresh({ id, userName }: User) {
+  async getAccessAndRefresh({
+    id,
+    userName,
+  }: UserTokenData): Promise<AuthTokens> {
     const data = { id, userName };
 
-    const access_token = await this.jwtService.signAsync(data);
-
-    const refresh_token = await this.jwtService.signAsync(data, {
-      secret: this.configService.get('JWT_REFRESH_SECRET'),
-      expiresIn: '1w',
-    });
+    const [access_token, refresh_token] = await Promise.all([
+      this.jwtService.signAsync(data),
+      this.jwtService.signAsync(data, {
+        secret: this.configService.get('JWT_REFRESH_SECRET'),
+        expiresIn: '1w',
+      }),
+    ]);
 
     await this.client.setex(id, REFRESH_TOKEN_EXPIRATION, refresh_token);
 
