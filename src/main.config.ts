@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { EntityNotFoundFilter } from './common/filters/entity-not-found.filter';
 
 export default (app: INestApplication, config: ConfigService) => {
   app.enableCors();
@@ -20,6 +21,7 @@ export default (app: INestApplication, config: ConfigService) => {
   app.useGlobalPipes(
     new ValidationPipe({ transform: true, skipMissingProperties: true }),
   );
+  app.useGlobalFilters(new EntityNotFoundFilter());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Sabina Rentals Payments API')
