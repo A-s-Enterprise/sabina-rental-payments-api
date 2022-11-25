@@ -6,7 +6,6 @@ import {
   Param,
   Get,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,7 +14,6 @@ import { UpdateUserStatusDto } from './dto/update-user-status.dto';
 import { AdminGuard } from '../common/guards/admin.guard';
 import { JwtGuard } from '../common/guards/jwt.guard';
 import { UserActiveGuard } from '../common/guards/user-active.guard';
-import { Request } from 'express';
 
 @Controller('users')
 @UseGuards(JwtGuard)
@@ -30,7 +28,7 @@ export class UserController {
 
   @Get(':id')
   getUser(@Param('id') id: string) {
-    return this.userService.findById(id);
+    return this.userService.findByIdOrThrow(id);
   }
 
   @Post()
