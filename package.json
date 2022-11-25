@@ -23,10 +23,11 @@
     "docker:up": "docker-compose up --wait --quiet-pull",
     "docker:down": "docker-compose down",
     "docker:volume-clear": "docker volume prune --force",
-    "git:dev-squash": "git checkout main && git merge --squash development",
+    "git:dev-squash": "git checkout main && git merge squash development --log -m",
     "db:migrate": "npx prisma migrate dev --name",
+    "postdb:migrate": "npx prisma generate",
     "db:ui": "npx prisma studio",
-    "test:auth": "jest --verbose ./src/user --watch"
+    "test:auth": "jest --verbose ./src/room/ --watch"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.204.0",
