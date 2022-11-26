@@ -43,11 +43,7 @@ export class RoomService {
   async delete(id: string): Promise<Room> {
     // can't delete a room if
     // there's a tenant residing in that room
-<<<<<<< HEAD
-    const room = await this.prisma.room.findUnique({
-=======
     const room = await this.prisma.room.findUniqueOrThrow({
->>>>>>> development
       where: {
         id,
       },

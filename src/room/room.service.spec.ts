@@ -101,11 +101,6 @@ describe('RoomService', () => {
       });
     });
 
-<<<<<<< HEAD
-    describe('findByName', () => {
-      it('should return the `room` base on the name', async () => {
-        await expect(service.findByName('one')).resolves.toEqual(rooms[0]);
-=======
     describe('findByIdOrThrow', () => {
       it('should throw an error of `Room not Found.`', async () => {
         jest
@@ -115,7 +110,6 @@ describe('RoomService', () => {
         await expect(service.findByIdOrThrow('one')).rejects.toThrowError(
           /Room not Found/,
         );
->>>>>>> development
       });
     });
   });
