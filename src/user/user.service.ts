@@ -1,41 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../db/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findOne(args?: Prisma.UserFindUniqueOrThrowArgs) {
-    return this.prisma.user.findUnique(args);
+  findByIdOrThrow(id: string) {
+    return this.prisma.user.findUniqueOrThrow({ where: { id } });
   }
 
-  findMany(args?: Prisma.UserFindUniqueOrThrowArgs) {
+  findByUsernameOrThrow(userName: string) {
+    return this.prisma.user.findFirstOrThrow({ where: { userName } });
+  }
+
+  findMany(args?: Prisma.UserFindUniqueOrThrowArgs): Promise<User[]> {
     return this.prisma.user.findMany(args);
   }
 
-  findByEmail(email: string) {
-    return this.findOne({
+  findByEmail(email: string): Promise<User> {
+    return this.prisma.user.findUnique({
       where: { email },
     });
   }
 
   findByUsername(userName: string) {
-    return this.findOne({
+    return this.prisma.user.findUnique({
       where: { userName },
     });
   }
 
   findById(id: string) {
-    return this.findOne({
+    return this.prisma.user.findUnique({
       where: { id },
     });
   }
 
   findTenantPayment(id: string, paymentId: string) {
-    return this.findOne({
+    return this.prisma.user.findUnique({
       where: { id },
-      select: { password: false },
       include: {
         payments: {
           where: {
@@ -47,9 +50,10 @@ export class UserService {
   }
 
   findTenantPayments(id: string) {
-    return this.findOne({
-      where: { id },
-      select: { password: false },
+    return this.prisma.user.findUnique({
+      where: {
+        id,
+      },
       include: {
         payments: true,
       },
@@ -57,7 +61,7 @@ export class UserService {
   }
 
   findTenantConversations(id: string) {
-    return this.findOne({
+    return this.prisma.user.findUnique({
       where: {
         id,
       },
@@ -68,7 +72,7 @@ export class UserService {
   }
 
   findTenantConversationMessages(id: string, conversationId: string) {
-    return this.findOne({
+    return this.prisma.user.findUnique({
       where: {
         id,
       },

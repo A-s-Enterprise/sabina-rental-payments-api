@@ -16,6 +16,7 @@ import { CacheModule } from './cache/cache.module';
 import { FloorModule } from './floor/floor.module';
 import { RoomModule } from './room/room.module';
 import { RoomTypeModule } from './room-type/room-type.module';
+import { IsNameAlreadyExistConstraint } from './common/validators/IsNameAlreadyExist';
 
 @Module({
   imports: [
@@ -30,11 +31,11 @@ import { RoomTypeModule } from './room-type/room-type.module';
     AuthModule,
     UserModule,
     FloorModule,
-    RoomModule,
     RoomTypeModule,
+    RoomModule,
   ],
   controllers: [AppController],
-  providers: [AppService, RateLimiterGuard],
+  providers: [AppService, RateLimiterGuard, IsNameAlreadyExistConstraint],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RoomService } from './room.service';
 import { PrismaService } from './../db/prisma.service';
 import { Room, Status } from '@prisma/client';
+import { BadRequestException } from '@nestjs/common';
 import * as uuid from 'uuid';
 
 describe('RoomService', () => {
@@ -68,6 +69,10 @@ describe('RoomService', () => {
               }),
               update: jest.fn().mockResolvedValue(rooms[3]),
               delete: jest.fn().mockResolvedValue(rooms[4]),
+<<<<<<< HEAD
+=======
+              findUniqueOrThrow: jest.fn(),
+>>>>>>> development
             },
           },
         },
@@ -96,9 +101,21 @@ describe('RoomService', () => {
       });
     });
 
+<<<<<<< HEAD
     describe('findByName', () => {
       it('should return the `room` base on the name', async () => {
         await expect(service.findByName('one')).resolves.toEqual(rooms[0]);
+=======
+    describe('findByIdOrThrow', () => {
+      it('should throw an error of `Room not Found.`', async () => {
+        jest
+          .spyOn(service, 'findByIdOrThrow')
+          .mockRejectedValueOnce(new BadRequestException('Room not Found'));
+
+        await expect(service.findByIdOrThrow('one')).rejects.toThrowError(
+          /Room not Found/,
+        );
+>>>>>>> development
       });
     });
   });

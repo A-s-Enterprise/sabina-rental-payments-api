@@ -64,13 +64,15 @@ describe('UserService', () => {
 
                 if (!keys.length) return null;
 
-                return users.find((value) => {
-                  for (const key of keys) {
-                    if (where[key] !== value[key]) return false;
-                  }
+                return (
+                  users.find((value) => {
+                    for (const key of keys) {
+                      if (where[key] !== value[key]) return false;
+                    }
 
-                  return true;
-                });
+                    return true;
+                  }) || null
+                );
               }),
               findMany: jest.fn().mockResolvedValue(users),
               count: jest.fn(),
@@ -97,41 +99,25 @@ describe('UserService', () => {
 
   describe('findOne', () => {
     it('should return `null` if user is not found', async () => {
-      await expect(
-        service.findOne({
-          where: {},
-        }),
-      ).resolves.toBeNull();
+      await expect(service.findById('')).resolves.toBeNull();
     });
 
     it('should return the first use base on the email', async () => {
-      await expect(
-        service.findOne({
-          where: {
-            email: 'test@gmail.com',
-          },
-        }),
-      ).resolves.toEqual(users[0]);
+      await expect(service.findByEmail('test@gmail.com')).resolves.toEqual(
+        users[0],
+      );
     });
 
     it('should return the first use base on the id', async () => {
       await expect(
-        service.findOne({
-          where: {
-            id: '5903b7ad-79ba-4adf-b334-801d1dc50012',
-          },
-        }),
+        service.findById('5903b7ad-79ba-4adf-b334-801d1dc50012'),
       ).resolves.toEqual(users[0]);
     });
 
     it('should return the first use base on the userName', async () => {
-      await expect(
-        service.findOne({
-          where: {
-            userName: 'juan_dela_cruz',
-          },
-        }),
-      ).resolves.toEqual(users[1]);
+      await expect(service.findByUsername('juan_dela_cruz')).resolves.toEqual(
+        users[1],
+      );
     });
   });
 

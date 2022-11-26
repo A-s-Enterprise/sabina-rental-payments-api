@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
 
   async login({ userName, password }: LoginDto): Promise<AuthTokens> {
-    const user = await this.userService.findByUsername(userName);
+    const user = await this.userService.findByUsernameOrThrow(userName);
 
     const isPasswordTheSame = await comparePassword(password, user?.password);
 
