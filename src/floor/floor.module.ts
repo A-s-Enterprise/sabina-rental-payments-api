@@ -2,11 +2,10 @@ import { Module } from '@nestjs/common';
 import { FloorService } from './floor.service';
 import { FloorController } from './floor.controller';
 import { DatabaseModule } from '../db/database.module';
-import { IsNameAlreadyExistConstraint } from '../common/validators/IsNameAlreadyExist';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [FloorService, IsNameAlreadyExistConstraint],
+  providers: [FloorService],
   controllers: [FloorController],
 })
 export class FloorModule {}

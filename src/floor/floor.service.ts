@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../db/prisma.service';
-import { Floor, Prisma } from '@prisma/client';
+import { Floor, Prisma, Status } from '@prisma/client';
 import { CreateFloorDto } from './dto/create-floor.dto';
 import { UpdateFloorDto } from './dto/update-floor.dto';
 
@@ -8,15 +8,25 @@ import { UpdateFloorDto } from './dto/update-floor.dto';
 export class FloorService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findById(id: string, include?: Prisma.FloorInclude) {
-    return this.prisma.floor.findUnique({
-      where: { id },
-      include: { rooms: true },
-    });
+  findMany(args?: Prisma.FloorFindManyArgs) {
+    return this.prisma.floor.findMany(args);
   }
 
-  findByName(name: string): Promise<Floor> {
-    return this.prisma.floor.findFirst({ where: { name } });
+  findOne(args: Prisma.FloorFindUniqueOrThrowArgs) {
+    return this.prisma.floor.findUnique(args);
+  }
+
+  findByIdOrThrow(id: string): Promise<Floor> {
+    return this.prisma.floor.findUniqueOrThrow({ where: { id } });
+  }
+
+  findById(id: string, include?: Prisma.FloorInclude) {
+    return this.findOne({
+      where: {
+        id,
+      },
+      include,
+    });
   }
 
   create(data: CreateFloorDto): Promise<Floor> {
@@ -25,7 +35,10 @@ export class FloorService {
     });
   }
 
-  update(where: any, data: UpdateFloorDto): Promise<Floor> {
+  update(
+    where: Prisma.FloorWhereUniqueInput,
+    data: UpdateFloorDto,
+  ): Promise<Floor> {
     return this.prisma.floor.update({
       where,
       data,
@@ -36,8 +49,12 @@ export class FloorService {
     return this.update({ id }, data);
   }
 
-  async deleteById(id: string) {
-    const floor = await this.prisma.floor.findUnique({
+  updateStatusById(id: string, status: Status): Promise<Floor> {
+    return this.update({ id }, { status });
+  }
+
+  async delete(id: string): Promise<Floor> {
+    const floor = await this.prisma.floor.findUniqueOrThrow({
       where: {
         id,
       },
@@ -50,11 +67,7 @@ export class FloorService {
       },
     });
 
-    if (!floor) {
-      throw new BadRequestException('floor does not exist.');
-    }
-
-    if (floor._count.rooms) {
+    if (floor?._count?.rooms) {
       throw new BadRequestException('floor has existing rooms.');
     }
 

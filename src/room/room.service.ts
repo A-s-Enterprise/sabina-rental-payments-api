@@ -12,24 +12,12 @@ export class RoomService {
     return this.prisma.room.findMany(args);
   }
 
-  findOne(args?: Prisma.RoomFindUniqueArgs) {
-    return this.prisma.room.findUnique(args);
-  }
-
   findByIdOrThrow(id: string): Promise<Room> {
     return this.prisma.room.findUniqueOrThrow({ where: { id } });
   }
 
   findById(id: string): Promise<Room> {
     return this.prisma.room.findUnique({ where: { id } });
-  }
-
-  findByName(name: string): Promise<Room> {
-    return this.findOne({
-      where: {
-        name,
-      },
-    });
   }
 
   create(data: CreateRoomDto): Promise<Room> {
@@ -55,7 +43,7 @@ export class RoomService {
   async delete(id: string): Promise<Room> {
     // can't delete a room if
     // there's a tenant residing in that room
-    const room = await this.prisma.room.findUnique({
+    const room = await this.prisma.room.findUniqueOrThrow({
       where: {
         id,
       },

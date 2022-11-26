@@ -10,14 +10,20 @@ import {
 import { CreateFloorDto } from './dto/create-floor.dto';
 import { FloorService } from './floor.service';
 import { UpdateFloorDto } from './dto/update-floor.dto';
+import { Status } from '@prisma/client';
 
 @Controller('floors')
 export class FloorController {
   constructor(private readonly floorService: FloorService) {}
 
+  @Get()
+  findMany() {
+    return this.floorService.findMany({});
+  }
+
   @Get(':id')
   findById(@Param('id') id: string) {
-    return this.floorService.findById(id);
+    return this.floorService.findByIdOrThrow(id);
   }
 
   @Post()
@@ -32,9 +38,11 @@ export class FloorController {
 
   @Delete(':id')
   deleteById(@Param('id') id: string) {
-    return this.floorService.deleteById(id);
+    return this.floorService.delete(id);
   }
 
   @Put(':id/status')
-  updateStatus() {}
+  updateStatus(@Param('id') id: string, @Body('status') status: Status) {
+    return this.floorService.updateStatusById(id, status);
+  }
 }

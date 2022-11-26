@@ -42,14 +42,16 @@ describe('AuthService', () => {
         {
           provide: UserService,
           useValue: {
-            findByUsername: jest.fn().mockImplementation(async (userName) => {
-              const user = users.find((user) => user.userName === userName);
+            findByUsernameOrThrow: jest
+              .fn()
+              .mockImplementation(async (userName) => {
+                const user = users.find((user) => user.userName === userName);
 
-              if (!user) {
-                throw new BadRequestException('user does not exist.');
-              }
-              return user;
-            }),
+                if (!user) {
+                  throw new BadRequestException('user does not exist.');
+                }
+                return user;
+              }),
           },
         },
         {
