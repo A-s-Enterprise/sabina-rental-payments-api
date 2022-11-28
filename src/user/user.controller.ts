@@ -1,27 +1,17 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Put,
-  Param,
-  Get,
-  UseGuards,
-} from '@nestjs/common';
+import { Post, Body, Put, Param, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UpdateUserStatusDto } from './dto/update-user-status.dto';
-import { AdminGuard } from '../common/guards/admin.guard';
-import { JwtGuard } from '../common/guards/jwt.guard';
-import { UserActiveGuard } from '../common/guards/user-active.guard';
+import { UpdateUserTypeDto } from './dto/update-user-type.dto';
 
-@Controller('users')
-@UseGuards(JwtGuard)
+import { ControllerWithAuth } from '../common/decorators/controller-with-auth.controller';
+import { UpdateUserStatusDto } from './dto/update-user-status.dto';
+
+@ControllerWithAuth('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(AdminGuard, UserActiveGuard)
   getUsers() {
     return this.userService.findMany();
   }
@@ -41,8 +31,13 @@ export class UserController {
     return this.userService.updateById(id, updateUserDto);
   }
 
+  @Put(':id/type')
+  updateUserStatus(@Param('id') id: string, @Body() dto: UpdateUserTypeDto) {
+    return this.userService.updateUserType(id, dto.type);
+  }
+
   @Put(':id/status')
-  updateUserStatus(@Param('id') id: string, @Body() dto: UpdateUserStatusDto) {
-    return this.userService.updateUserStatus(id, dto.type);
+  updateUserType(@Param('id') id: string, @Body() dto: UpdateUserStatusDto) {
+    return this.userService.updateUserStatus(id, dto.status);
   }
 }

@@ -1,6 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, MaxLength, IsOptional, IsEmail } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Status, UserType } from '@prisma/client';
+import {
+  IsString,
+  MaxLength,
+  IsOptional,
+  IsEmail,
+  IsDate,
+  IsEnum,
+  IsDateString,
+} from 'class-validator';
 import { IsEmailAlreadyExist } from '../validators/IsEmailUserAlreadyExist';
+import { IsRoomIdExist } from '../validators/IsRoomIdExist';
 import { IsUsernameAlreadyExist } from '../validators/IsUsernameAlreadyExist';
 
 export class CreateUserDto {
@@ -11,7 +21,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   middleName?: string;
 
   @IsString()
@@ -19,7 +29,6 @@ export class CreateUserDto {
   @ApiProperty()
   lastName: string;
 
-  @IsString()
   @IsEmail()
   @MaxLength(50)
   @IsEmailAlreadyExist()
@@ -33,14 +42,26 @@ export class CreateUserDto {
   userName: string;
 
   @IsString()
+  @IsRoomIdExist()
+  roomId: string;
+
+  @IsString()
   @ApiProperty()
   password: string;
 
   @IsString()
   @IsOptional()
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   avatarUrl?: string;
 
-  @IsString()
-  dateOfBirth: string;
+  @IsDateString()
+  dateOfBirth: string | Date;
+
+  @IsEnum(Status)
+  @IsOptional()
+  status: Status = 'INACTIVE';
+
+  @IsEnum(UserType)
+  @IsOptional()
+  type?: UserType = 'TENANT';
 }
