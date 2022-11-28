@@ -141,8 +141,7 @@ describe('UserService', () => {
           type: 'TENANT',
           password: 'test-password123',
           dateOfBirth: new Date('1990-05-29'),
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          roomId: 'test',
           middleName: null,
         }),
       ).resolves.toHaveProperty('id');
@@ -174,10 +173,7 @@ describe('UserService', () => {
       jest.spyOn(prismaService.user, 'update').mockResolvedValueOnce(users[0]);
 
       await expect(
-        service.updateUserStatus(
-          '5903b7ad-79ba-4adf-b334-801d1dc50012',
-          'ADMIN',
-        ),
+        service.updateUserType('5903b7ad-79ba-4adf-b334-801d1dc50012', 'ADMIN'),
       ).resolves.toEqual(users[0]);
     });
   });
