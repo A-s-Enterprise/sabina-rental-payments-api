@@ -23,13 +23,15 @@ export default (app: INestApplication, config: ConfigService) => {
   );
   app.useGlobalFilters(new EntityNotFoundFilter());
 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Sabina Rentals Payments API')
-    .setVersion('1.0')
-    .build();
+  if (config.get('NODE_ENV') !== 'production') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('Sabina Rentals Payments API')
+      .setVersion('1.0')
+      .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, document);
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('docs', app, document);
+  }
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 };
