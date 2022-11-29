@@ -28,9 +28,7 @@
     "postdb:migrate": "npx prisma generate",
     "db:ui": "npx prisma studio",
     "test:feature": "jest --watch  --verbose",
-    "pretest:integration": "docker compose -f ./docker/compose-integration.yml up --wait --quiet-pull",
-    "test:integration": "yarn dotenv -e ./.env.test npx prisma migrate dev && jest -c ./jest.integration.config.js || yarn posttest:integration",
-    "posttest:integration": "docker compose -f ./docker/compose-integration.yml down -v ",
+    "test:integration": "yarn dotenv -e ./.env.test npx prisma migrate --force reset && jest -i --testRegex='.*\\.integration.ts$'",
     "dotenv": "./node_modules/.bin/dotenv"
   },
   "dependencies": {
@@ -90,9 +88,6 @@
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.1.0",
     "typescript": "^4.7.4"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
   },
   "jest": {
     "moduleFileExtensions": [
