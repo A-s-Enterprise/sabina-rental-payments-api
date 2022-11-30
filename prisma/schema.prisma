@@ -42,6 +42,7 @@ model User {
 model Floor {
   id        String   @id @default(uuid())
   name      String   @unique
+  roomLimit Int?     @default(5) @map("room_limit")
   status    Status   @default(INACTIVE)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
