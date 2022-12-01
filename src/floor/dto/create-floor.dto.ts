@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Status } from '@prisma/client';
-import { IsString, IsEnum, IsOptional } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsIn, IsInt } from 'class-validator';
 import { IsNameAlreadyExist } from '../../common/validators/IsNameAlreadyExist';
 
 export class CreateFloorDto {
@@ -10,7 +10,12 @@ export class CreateFloorDto {
   name: string;
 
   @IsEnum(Status)
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsOptional()
   status?: Status = 'INACTIVE';
+
+  @IsInt()
+  @ApiPropertyOptional()
+  @IsOptional()
+  roomLimit? = 5;
 }
