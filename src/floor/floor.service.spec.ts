@@ -15,6 +15,7 @@ describe('FloorService', () => {
       status: Status.INACTIVE,
       createdAt: new Date(),
       updatedAt: new Date(),
+      roomLimit: 5,
     },
     {
       id: '0f533024-d8b3-4dd2-9e56-d75231025c5e',
@@ -22,6 +23,7 @@ describe('FloorService', () => {
       status: Status.INACTIVE,
       createdAt: new Date(),
       updatedAt: new Date(),
+      roomLimit: 5,
     },
   ];
 
