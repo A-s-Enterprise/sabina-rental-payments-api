@@ -3,6 +3,7 @@ import { FloorController } from './floor.controller';
 import { FloorService } from './floor.service';
 import { Floor, Status } from '@prisma/client';
 import * as uuid from 'uuid';
+import { PrismaService } from '../db/prisma.service';
 
 describe('FloorController', () => {
   let controller: FloorController;
@@ -14,6 +15,7 @@ describe('FloorController', () => {
     status: Status.INACTIVE,
     createdAt: new Date(),
     updatedAt: new Date(),
+    roomLimit: 5,
   };
 
   const floors: Floor[] = [
@@ -23,6 +25,7 @@ describe('FloorController', () => {
       status: Status.INACTIVE,
       createdAt: new Date(),
       updatedAt: new Date(),
+      roomLimit: 5,
     },
     secondFloor,
     {
@@ -31,6 +34,7 @@ describe('FloorController', () => {
       status: Status.ACTIVE,
       createdAt: new Date(),
       updatedAt: new Date(),
+      roomLimit: 5,
     },
   ];
 
@@ -69,6 +73,10 @@ describe('FloorController', () => {
               };
             }),
           },
+        },
+        {
+          provide: PrismaService,
+          useValue: jest.fn(),
         },
       ],
     }).compile();
