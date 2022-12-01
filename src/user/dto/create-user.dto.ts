@@ -5,11 +5,11 @@ import {
   MaxLength,
   IsOptional,
   IsEmail,
-  IsDate,
   IsEnum,
   IsDateString,
 } from 'class-validator';
 import { IsEmailAlreadyExist } from '../validators/IsEmailUserAlreadyExist';
+import { IsRoomFull } from '../validators/IsRoomFull';
 import { IsRoomIdExist } from '../validators/IsRoomIdExist';
 import { IsUsernameAlreadyExist } from '../validators/IsUsernameAlreadyExist';
 
@@ -43,6 +43,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsRoomIdExist()
+  @IsRoomFull()
   roomId: string;
 
   @IsString()
