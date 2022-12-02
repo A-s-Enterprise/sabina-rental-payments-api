@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+import { PrismaService } from './../db/prisma.service';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -12,6 +13,10 @@ describe('UserController', () => {
         {
           provide: UserService,
           useValue: {},
+        },
+        {
+          provide: PrismaService,
+          useValue: jest.fn(),
         },
       ],
     }).compile();
