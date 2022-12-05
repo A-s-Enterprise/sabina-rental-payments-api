@@ -5,11 +5,8 @@ import { BadRequestException, HttpException } from '@nestjs/common';
 const beforeActionMiddleware: Prisma.Middleware = async (params, next) => {
   const { model, action, args } = params;
 
-  if (model == 'User' && action == 'create') {
-    params.args.data.password = await hashPassword(args.data.password);
-  }
-
   const result = await next(params);
+
   // the below code executes after `afterActionMiddleware`
   return result;
 };
