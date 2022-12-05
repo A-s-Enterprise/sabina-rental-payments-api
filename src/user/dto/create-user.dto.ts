@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Status, UserType } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsString,
   MaxLength,
@@ -12,6 +13,7 @@ import { IsEmailAlreadyExist } from '../validators/IsEmailUserAlreadyExist';
 import { IsRoomFull } from '../validators/IsRoomFull';
 import { IsRoomIdExist } from '../validators/IsRoomIdExist';
 import { IsUsernameAlreadyExist } from '../validators/IsUsernameAlreadyExist';
+import * as bcrypt from 'bcrypt';
 
 export class CreateUserDto {
   @IsString()
@@ -48,6 +50,7 @@ export class CreateUserDto {
 
   @IsString()
   @ApiProperty()
+  @Transform(({ value }) => bcrypt.hashSync(value, bcrypt.genSaltSync(10)))
   password: string;
 
   @IsString()
