@@ -28,8 +28,10 @@
     "postdb:migrate": "npx prisma generate",
     "db:ui": "npx prisma studio",
     "test:feature": "jest --watch  --verbose",
-    "test:integration": "yarn dotenv -e ./.env.test npx prisma migrate --force reset && jest -i --testRegex='.*\\.integration.ts$'",
-    "dotenv": "./node_modules/.bin/dotenv"
+    "pretest:integration": "yarn dotenv -e ./.env.test npx prisma migrate dev --name initial && yarn dotenv -e ./.env.test npx prisma db push",
+    "test:integration": "jest -i -c ./setup-integration.js",
+    "dotenv": "./node_modules/.bin/dotenv",
+    "push": "git push origin main && git push origingitlab main"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.204.0",
