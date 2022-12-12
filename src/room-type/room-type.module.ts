@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { RoomTypeService } from './room-type.service';
 import { RoomTypeController } from './room-type.controller';
-import { DatabaseModule } from '../db/database.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [],
   providers: [RoomTypeService],
   controllers: [RoomTypeController],
 })
