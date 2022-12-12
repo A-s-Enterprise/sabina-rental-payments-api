@@ -6,6 +6,7 @@ import { RoomService } from './room.service';
 import * as uuid from 'uuid';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { PrismaService } from './../db/prisma.service';
 
 describe('RoomController', () => {
   let controller: RoomController;
@@ -63,6 +64,10 @@ describe('RoomController', () => {
               return { ...rooms[0], id };
             },
           },
+        },
+        {
+          provide: PrismaService,
+          useValue: jest.fn(),
         },
       ],
     }).compile();
