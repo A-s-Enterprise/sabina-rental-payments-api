@@ -1,0 +1,139 @@
+[
+  {
+    "name": "sabina_rentals_payments_index_template",
+    "body": {
+      "index_patterns": [
+        "sabina_rentals_payments_*_index"
+      ],
+      "priority": 1,
+      "template": {
+        "settings": {
+          "number_of_shards": 2,
+          "number_of_replicas": 2,
+          "analysis": {
+            "analyzer": {
+              "edge_ngram": {
+                "tokenizer": "standard",
+                "filter": [
+                  "lowercase",
+                  "edge_ngram",
+                  "remove_duplicates"
+                ]
+              }
+            },
+            "filter": {
+              "edge_ngram": {
+                "type": "edge_ngram",
+                "min_gram": 1,
+                "max_gram": 50
+              }
+            }
+          }
+        },
+        "mappings": {
+          "properties": {
+            "created_at": {
+              "type": "date",
+              "format": "strict_date_optional_time||epoch_millis"
+            },
+            "updated_at": {
+              "type": "date",
+              "format": "strict_date_optional_time||epoch_millis"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "logs_index_template",
+    "body": {
+      "index_patterns": [
+        "sabina_rental_payments_logs*"
+      ],
+      "priority": 5,
+      "template": {
+        "settings": {
+          "index": {
+            "max_ngram_diff": 5
+          },
+          "number_of_shards": 2,
+          "number_of_replicas": 1,
+          "analysis": {
+            "analyzer": {
+              "custom_ngram": {
+                "tokenizer": "standard",
+                "filter": [
+                  "lowercase",
+                  "ngram"
+                ]
+              }
+            },
+            "filter": {
+              "ngram": {
+                "type": "ngram",
+                "min_gram": 1,
+                "max_gram": 6
+              }
+            }
+          }
+        },
+        "mappings": {
+          "properties": {
+            "log_level": {
+              "type": "keyword"
+            },
+            "controller": {
+              "type": "keyword",
+              "fields": {
+                "ngram": {
+                  "type": "text",
+                  "analyzer": "custom_ngram"
+                }
+              }
+            },
+            "handler": {
+              "type": "keyword",
+              "fields": {
+                "ngram": {
+                  "type": "text",
+                  "analyzer": "custom_ngram"
+                }
+              }
+            },
+            "method": {
+              "type": "keyword"
+            },
+            "path": {
+              "type": "keyword",
+              "fields": {
+                "ngram": {
+                  "type": "text",
+                  "analyzer": "custom_ngram"
+                }
+              }
+            },
+            "status_code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "object"
+            },
+            "ip_address": {
+              "type": "keyword",
+              "fields": {
+                "ngram": {
+                  "type": "text",
+                  "analyzer": "custom_ngram"
+                }
+              }
+            },
+            "log_date": {
+              "type": "date"
+            }
+          }
+        }
+      }
+    }
+  }
+]
