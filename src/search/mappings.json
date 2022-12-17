@@ -141,7 +141,8 @@
   },
   "sabina_rentals_payments_messages_index": {
     "aliases": {
-      "tags": {}
+      "messages": {},
+      "msgs":{}
     },
     "mappings": {
       "properties": {
