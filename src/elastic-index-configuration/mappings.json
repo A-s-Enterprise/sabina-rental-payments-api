@@ -1,0 +1,164 @@
+{
+  "sabina_rentals_payments_users_index": {
+    "aliases": {
+      "users": {}
+    },
+    "mappings": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "status": {
+          "type": "keyword"
+        },
+        "type": {
+          "type": "keyword"
+        },
+        "first_name": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        },
+        "last_name": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        },
+        "email": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        },
+        "userName": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        },
+        "password": {
+          "type": "keyword",
+          "index": false
+        }
+      }
+    }
+  },
+  "sabina_rentals_payments_rooms_index": {
+    "aliases": {
+      "rooms": {}
+    },
+    "mappings": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "title": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        },
+        "description": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        },
+        "is_done": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sabina_rentals_payments_room_types_index": {
+    "aliases": {
+      "room_types": {}
+    },
+    "mappings": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "task_id": {
+          "type": "keyword"
+        },
+        "comment": {
+          "type": "text",
+          "analyzer": "edge_ngram"
+        }
+      }
+    }
+  },
+  "sabina_rentals_payments_floors_index": {
+    "aliases": {
+      "floors": {}
+    },
+    "mappings": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sabina_rentals_payments_messages_index": {
+    "aliases": {
+      "messages": {},
+      "msgs":{}
+    },
+    "mappings": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "keyword",
+          "fields": {
+            "edge_ngram": {
+              "type": "text",
+              "analyzer": "edge_ngram"
+            }
+          }
+        }
+      }
+    }
+  }
+}
