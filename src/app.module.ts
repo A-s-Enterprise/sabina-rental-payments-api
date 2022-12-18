@@ -17,22 +17,24 @@ import { FloorModule } from './floor/floor.module';
 import { RoomModule } from './room/room.module';
 import { RoomTypeModule } from './room-type/room-type.module';
 import { IsNameAlreadyExistConstraint } from './common/validators/IsNameAlreadyExist';
+import { ElasticIndexConfigurationModule } from './elastic-index-configuration/elastic-index-configuration.module';
 
 @Module({
   imports: [
     ConfigurationModule,
+    ElasticIndexConfigurationModule,
     RateLimiterModule,
     CacheModule,
     S3Module,
     ScheduleModule.forRoot(),
     DatabaseModule,
     HealthModule,
-    SearchModule,
     AuthModule,
     UserModule,
     FloorModule,
     RoomTypeModule,
     RoomModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService, RateLimiterGuard, IsNameAlreadyExistConstraint],
